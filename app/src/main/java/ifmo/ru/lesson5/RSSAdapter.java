@@ -44,7 +44,7 @@ public class RSSAdapter extends BaseAdapter {
         title.setText(item.getTitle());
 
         TextView text = (TextView) l.findViewById(R.id.textView2);
-        String styledText = Html.fromHtml(item.getText()).toString();
+        String styledText = String.valueOf(Html.fromHtml(item.getText()));
         text.setText(styledText);
 
         return l;

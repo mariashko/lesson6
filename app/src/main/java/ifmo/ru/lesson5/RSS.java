@@ -3,7 +3,6 @@ package ifmo.ru.lesson5;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -24,7 +23,9 @@ public class RSS extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rss);
 
-        subscriptions.add("http://bash.im/rss/");
+        subscriptions.add("http://feeds.bbci.co.uk/news/rss.xml");
+        subscriptions.add("http://feeds.feedburner.com/zenhabits?format=xml");
+
         downloader = new RSSDownloader(this);
         try {
             rssItems = downloader.execute(subscriptions).get();
