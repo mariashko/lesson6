@@ -1,4 +1,4 @@
-package ifmo.ru.lesson5;
+package ifmo.ru.lesson5.main_activity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package ifmo.ru.lesson5;
+package ifmo.ru.lesson5.main_activity;
 
 /**
  * Created by mariashka on 10/19/14.

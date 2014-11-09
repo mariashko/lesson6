@@ -1,4 +1,4 @@
-package ifmo.ru.lesson5;
+package ifmo.ru.lesson5.main_activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;

@@ -1,10 +1,10 @@
-package ifmo.ru.lesson5;
+package ifmo.ru.lesson5.main_activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.webkit.WebView;
+
+import ifmo.ru.lesson5.R;
 
 
 public class PreviewActivity extends Activity {

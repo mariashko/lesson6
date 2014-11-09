@@ -1,4 +1,4 @@
-package ifmo.ru.lesson5;
+package ifmo.ru.lesson5.main_activity;
 
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+
+import ifmo.ru.lesson5.R;
 
 /**
  * Created by mariashka on 10/19/14.
