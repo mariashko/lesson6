@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
 import org.xml.sax.SAXException;
 
@@ -37,7 +36,7 @@ public class RSSService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         List <RSSItem> list = new ArrayList<RSSItem>();
-        Cursor subs = getContentResolver().query(RSSContentProvider.SUB_CONTENT_URI, null, null, null, null);
+        Cursor subs = getContentResolver().query(SUB_URI, null, null, null, null);
         if (subs != null) {
             subs.moveToFirst();
             try {
@@ -54,8 +53,8 @@ public class RSSService extends IntentService {
                     saxParser.parse(in, handler);
 
                     List<RSSItem> curr = handler.getItems();
-                    for (int i = 0; i < curr.size(); i++) {
-                        list.add(curr.get(i));
+                    for (RSSItem aCurr : curr) {
+                        list.add(aCurr);
                     }
                     connection.disconnect();
                 } while (subs.moveToNext());
@@ -74,8 +73,10 @@ public class RSSService extends IntentService {
         cursor.moveToFirst();
             int n = cursor.getCount();
             for (int i = 0; i < n; i++) {
-                Uri uri = ContentUris.withAppendedId(FEED_URI, 0);
+                Uri uri = ContentUris.withAppendedId(FEED_URI, cursor.getInt(0));
                 getContentResolver().delete(uri, null, null);
+                cursor = getContentResolver().query(FEED_URI, null, null, null, null);
+                cursor.moveToFirst();
             }
             for (RSSItem aCurr : list) {
                 ContentValues cv = new ContentValues();
@@ -85,4 +86,5 @@ public class RSSService extends IntentService {
                 getContentResolver().insert(FEED_URI, cv);
             }
         }
+
 }

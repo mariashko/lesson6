@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 /**
  * Created by mariashka on 11/10/14.
@@ -31,16 +30,13 @@ public class RSSContentProvider extends ContentProvider {
     static public final String FEED_PATH = "feed";
     static public  final String SUB_PATH = "sub";
 
-    public static final Uri FEED_CONTENT_URI = Uri.parse("content://"
-            + AUTHORITY + "/" + FEED_PATH);
-
-    public static final Uri SUB_CONTENT_URI = Uri.parse("content://"
-            + AUTHORITY + "/" + SUB_PATH);
-
-    public static final String FEED_CONTENT_TYPE = "vnd.android.cursor.dir/vnd."
-            + AUTHORITY + "." + FEED_PATH;
+    final Uri FEED_URI = Uri.parse("content://ru.ifmo.lesson5.provider.RSSContentProvider/feed");
+    final Uri SUB_URI = Uri.parse("content://ru.ifmo.lesson5.provider.RSSContentProvider/sub");
 
     public static final String FEED_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd."
+            + AUTHORITY + "." + FEED_PATH;
+
+    public static final String FEED_CONTENT_TYPE = "vnd.android.cursor.dir/vnd."
             + AUTHORITY + "." + FEED_PATH;
 
     public static final String SUB_CONTENT_TYPE = "vnd.android.cursor.dir/vnd."
@@ -102,17 +98,17 @@ public class RSSContentProvider extends ContentProvider {
             case URI_SUB_ID:
                 id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
-                    selection = FEED_ID + " = " + id;
+                    selection = SUB_ID + " = " + id;
                 } else {
-                    selection = selection + " AND " + FEED_ID + " = " + id;
+                    selection = selection + " AND " + SUB_ID + " = " + id;
                 }
                 cursor = db.query(SUB_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             default:
                 throw new IllegalArgumentException("Wrong URI: " + uri);
         }
-        cursor.setNotificationUri(getContext().getContentResolver(), FEED_CONTENT_URI);
-        cursor.setNotificationUri(getContext().getContentResolver(), SUB_CONTENT_URI);
+        cursor.setNotificationUri(getContext().getContentResolver(), FEED_URI);
+        cursor.setNotificationUri(getContext().getContentResolver(), SUB_URI);
         return cursor;
     }
 
@@ -122,11 +118,11 @@ public class RSSContentProvider extends ContentProvider {
             case URI_SUB:
                 return SUB_CONTENT_TYPE;
             case URI_FEED:
-                return SUB_CONTENT_ITEM_TYPE;
+                return FEED_CONTENT_TYPE;
             case URI_FEED_ID:
                 return FEED_CONTENT_ITEM_TYPE;
             case URI_SUB_ID:
-                return FEED_CONTENT_TYPE;
+                return SUB_CONTENT_ITEM_TYPE;
         }
         return null;
     }
@@ -139,12 +135,12 @@ public class RSSContentProvider extends ContentProvider {
         switch (uriMatcher.match(uri)) {
             case URI_FEED:
                 rowID = db.insert(FEED_TABLE, null, values);
-                resultUri = ContentUris.withAppendedId(FEED_CONTENT_URI, rowID);
+                resultUri = ContentUris.withAppendedId(FEED_URI, rowID);
                 break;
 
             case URI_SUB:
                 rowID = db.insert(SUB_TABLE, null, values);
-                resultUri = ContentUris.withAppendedId(SUB_CONTENT_URI, rowID);
+                resultUri = ContentUris.withAppendedId(SUB_URI, rowID);
                 break;
 
             default:
