@@ -167,7 +167,6 @@ public class RSSContentProvider extends ContentProvider {
             case URI_SUB:
                 break;
             case URI_FEED_ID:
-                Log.d("fuck", "feed");
                 id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
                     selection = FEED_ID + " = " + id;
@@ -177,7 +176,6 @@ public class RSSContentProvider extends ContentProvider {
                 cnt = db.delete(FEED_TABLE, selection, selectionArgs);
                 break;
             case URI_SUB_ID:
-                Log.d("fuck", "sub");
                 id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
                     selection = SUB_ID + " = " + id;
