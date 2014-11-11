@@ -9,6 +9,11 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <service android:name=".main_activity.RSSService"/>
+        <provider
+            android:name=".main_activity.RSSContentProvider"
+            android:authorities="ru.ifmo.lesson5.provider.RSSContentProvider"
+            />
         <activity
             android:name=".main_activity.RSS"
             android:label="@string/title_activity_rss" >
