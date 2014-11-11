@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -21,6 +22,8 @@ public class SubscriptionList extends ListActivity {
 
     public List<String> subscr;
     public SubscriptionAdapter adapterSubscr;
+    final Uri FEED_URI = Uri.parse("content://ru.ifmo.lesson5.provider.RSSContentProvider/feed");
+    final Uri SUB_URI = Uri.parse("content://ru.ifmo.lesson5.provider.RSSContentProvider/sub");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +31,7 @@ public class SubscriptionList extends ListActivity {
         setContentView(R.layout.activity_subscription_list);
 
         subscr = new ArrayList<String>();
-        Cursor subs = getContentResolver().query(RSSContentProvider.SUB_CONTENT_URI, null, null, null, null);
+        Cursor subs = getContentResolver().query(SUB_URI, null, null, null, null);
         subs.moveToFirst();
         do {
             if (subs.isAfterLast())
@@ -43,14 +46,15 @@ public class SubscriptionList extends ListActivity {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                adapterSubscr.data.remove(position);
-                adapterSubscr.notifyDataSetChanged();
-
-                Uri uri = ContentUris.withAppendedId(RSSContentProvider.SUB_CONTENT_URI, position);
+                Uri uri = ContentUris.withAppendedId(SUB_URI, position);
                 getContentResolver().delete(uri, null, null);
+                Log.d("delete", uri.toString());
                 String mesg = "Further news of this feed wouldn't be downloaded";
                 Toast toast = Toast.makeText(getApplicationContext(), mesg, Toast.LENGTH_SHORT);
                 toast.show();
+
+                adapterSubscr.data.remove(position);
+                adapterSubscr.notifyDataSetChanged();
             }
         });
     }
@@ -65,7 +69,7 @@ public class SubscriptionList extends ListActivity {
             adapterSubscr.notifyDataSetChanged();
             ContentValues cv = new ContentValues();
             cv.put(RSSContentProvider.SUB_LINK, s);
-            getContentResolver().insert(RSSContentProvider.SUB_CONTENT_URI, cv);
+            getContentResolver().insert(SUB_URI, cv);
         }
     }
 

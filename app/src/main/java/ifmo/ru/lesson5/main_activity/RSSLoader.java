@@ -3,6 +3,8 @@ package ifmo.ru.lesson5.main_activity;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,8 @@ import java.util.List;
  */
 public class RSSLoader extends AsyncTaskLoader<List<RSSItem>> {
     Context context = null;
+    final Uri FEED_URI = Uri.parse("content://ru.ifmo.lesson5.provider.RSSContentProvider/feed");
+    final Uri SUB_URI = Uri.parse("content://ru.ifmo.lesson5.provider.RSSContentProvider/sub");
     public RSSLoader(Context c) {
         super(c);
         context = c;
@@ -23,7 +27,7 @@ public class RSSLoader extends AsyncTaskLoader<List<RSSItem>> {
 
     public List<RSSItem> offlineHandle() {
         List<RSSItem> list = new ArrayList<RSSItem>();
-        Cursor cursor = context.getContentResolver().query(RSSContentProvider.FEED_CONTENT_URI, null, null, null, null);
+        Cursor cursor = context.getContentResolver().query(FEED_URI, null, null, null, null);
         cursor.moveToFirst();
         do {
             if (cursor.isAfterLast())

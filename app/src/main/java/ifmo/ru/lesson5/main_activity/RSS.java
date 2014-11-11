@@ -24,6 +24,7 @@ public class RSS extends ListActivity {
         setContentView(R.layout.activity_rss);
 
         intent = new Intent(this, RSSService.class);
+        stopService(intent);
         startService(intent);
 
         downloader = new RSSLoader(this);
@@ -45,6 +46,7 @@ public class RSS extends ListActivity {
 
     public void editSubscrClick(View view) {
         startActivity(intentSubscr);
+        stopService(intent);
         startService(intent);
         rssItems = downloader.loadInBackground();
         adapter.notifyDataSetChanged();

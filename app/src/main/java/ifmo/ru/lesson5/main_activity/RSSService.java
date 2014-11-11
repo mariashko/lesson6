@@ -27,6 +27,9 @@ import javax.xml.parsers.SAXParserFactory;
  */
 public class RSSService extends IntentService {
 
+    final Uri FEED_URI = Uri.parse("content://ru.ifmo.lesson5.provider.RSSContentProvider/feed");
+    final Uri SUB_URI = Uri.parse("content://ru.ifmo.lesson5.provider.RSSContentProvider/sub");
+
     public RSSService() {
         super("net");
     }
@@ -35,7 +38,6 @@ public class RSSService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         List <RSSItem> list = new ArrayList<RSSItem>();
         Cursor subs = getContentResolver().query(RSSContentProvider.SUB_CONTENT_URI, null, null, null, null);
-        Log.d("fucking", "fuck");
         if (subs != null) {
             subs.moveToFirst();
             try {
@@ -68,20 +70,19 @@ public class RSSService extends IntentService {
             }
 
         }
-        Cursor cursor = getContentResolver().query(RSSContentProvider.FEED_CONTENT_URI, null, null, null, null);
+        Cursor cursor = getContentResolver().query(FEED_URI, null, null, null, null);
         cursor.moveToFirst();
-        int n = cursor.getCount();
-        for (int i = 0; i < n; i++) {
-            Uri uri = ContentUris.withAppendedId(RSSContentProvider.FEED_CONTENT_URI, 0);
-            getContentResolver().delete(uri, null, null);
+            int n = cursor.getCount();
+            for (int i = 0; i < n; i++) {
+                Uri uri = ContentUris.withAppendedId(FEED_URI, 0);
+                getContentResolver().delete(uri, null, null);
+            }
+            for (RSSItem aCurr : list) {
+                ContentValues cv = new ContentValues();
+                cv.put(RSSContentProvider.FEED_TITLE, aCurr.getTitle());
+                cv.put(RSSContentProvider.FEED_DESCR, aCurr.getText());
+                cv.put(RSSContentProvider.FEED_LINK, aCurr.getUrl());
+                getContentResolver().insert(FEED_URI, cv);
+            }
         }
-        for (RSSItem aCurr : list) {
-            ContentValues cv = new ContentValues();
-            cv.put(RSSContentProvider.FEED_TITLE, aCurr.getTitle());
-            cv.put(RSSContentProvider.FEED_DESCR, aCurr.getText());
-            cv.put(RSSContentProvider.FEED_LINK, aCurr.getUrl());
-            getContentResolver().insert(RSSContentProvider.FEED_CONTENT_URI, cv);
-        }
-
-    }
 }

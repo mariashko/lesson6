@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 /**
  * Created by mariashka on 11/10/14.
@@ -166,6 +167,7 @@ public class RSSContentProvider extends ContentProvider {
             case URI_SUB:
                 break;
             case URI_FEED_ID:
+                Log.d("fuck", "feed");
                 id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
                     selection = FEED_ID + " = " + id;
@@ -175,6 +177,7 @@ public class RSSContentProvider extends ContentProvider {
                 cnt = db.delete(FEED_TABLE, selection, selectionArgs);
                 break;
             case URI_SUB_ID:
+                Log.d("fuck", "sub");
                 id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
                     selection = SUB_ID + " = " + id;
